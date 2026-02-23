@@ -2,17 +2,18 @@ package bg.sofia.uni.fmi.mjt.burnout.subject;
 
 public enum Category {
 
-    MATH,
-    PROGRAMMING,
-    THEORY,
-    PRACTICAL;
+    MATH(0.2),
+    PROGRAMMING(0.1),
+    THEORY(0.15),
+    PRACTICAL(0.05);
 
-    public double coefficient(){
-        return switch (this){
-            case MATH -> 0.2;
-            case PROGRAMMING -> 0.1;
-            case THEORY -> 0.15;
-            case PRACTICAL -> 0.05;
-        };
+    private final double coefficient;
+
+    Category(double coefficient) {
+        this.coefficient = coefficient;
+    }
+
+    public double getCoefficient() {
+        return coefficient;
     }
 }

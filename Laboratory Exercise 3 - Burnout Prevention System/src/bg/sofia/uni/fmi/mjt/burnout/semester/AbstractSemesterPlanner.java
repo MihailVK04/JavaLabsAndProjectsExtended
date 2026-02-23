@@ -6,41 +6,55 @@ import bg.sofia.uni.fmi.mjt.burnout.subject.Category;
 import bg.sofia.uni.fmi.mjt.burnout.subject.SubjectRequirement;
 import bg.sofia.uni.fmi.mjt.burnout.subject.UniversitySubject;
 
-public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerAPI permits ComputerScienceSemesterPlanner, SoftwareEngineeringSemesterPlanner{
+public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerAPI permits
+    ComputerScienceSemesterPlanner, SoftwareEngineeringSemesterPlanner {
 
+    private static final int ZERO = 0;
+    private static final int ONE = 1;
     private static final int DAYS_FOR_ONE_JAR = 5;
     private static final int DOUBLE = 2;
 
-    protected int addSubjectsForCoveringCredits(UniversitySubject[] destination, UniversitySubject[] arrayWithAllSubjects, int size, int credits) {
-        int maxCredits = 0;
+    private void checkConditionsForJarCount(UniversitySubject[] subjects, int maximumSlackTime, int semesterDuration) {
+        if ( subjects == null ) {
+            throw new IllegalArgumentException("Subjects are null");
+        } else if ( maximumSlackTime <= ZERO ) {
+            throw new IllegalArgumentException("MaximumSlackTime is not positive");
+        } else if ( semesterDuration <= ZERO ) {
+            throw new IllegalArgumentException("SemesterDuration is not positive");
+        }
+    }
+
+    protected int addSubjectsForCoveringCredits(UniversitySubject[] destination,
+                                                UniversitySubject[] arrayWithAllSubjects, int size, int credits) {
+        int maxCredits = ZERO;
         UniversitySubject maxElement = null;
 
-        for ( UniversitySubject subject : arrayWithAllSubjects){
-            if(subject.credits() > maxCredits) {
-                for (int i = 0; i <= size; i++) {
+        for ( UniversitySubject subject : arrayWithAllSubjects) {
+            if (subject.credits() > maxCredits) {
+                for (int i = ZERO; i <= size; i++) {
                     if (!(subject.equals(destination[i]))) {
                         maxCredits = subject.credits();
                         maxElement = subject;
+                        break;
                     }
                 }
             }
         }
 
-        destination[size+1] = maxElement;
+        destination[size + ONE] = maxElement;
         return maxCredits + credits;
     }
 
-    protected int concatUniversitySubjectsArrays(UniversitySubject[] destination, UniversitySubject[] arrayForConcat, int size) {
-        for ( int i = 0; i < arrayForConcat.length; i++){
-            destination[size + i] = arrayForConcat[i];
-        }
-        return size + arrayForConcat.length - 1;
+    protected int concatUniversitySubjectsArrays(UniversitySubject[] destination, UniversitySubject[] arrayForConcat,
+                                                 int size) {
+        System.arraycopy(arrayForConcat, ZERO, destination, size, arrayForConcat.length);
+        return size + arrayForConcat.length - ONE;
     }
 
-    protected boolean checkForNotEnoughSubjects(SemesterPlan semesterPlan){
+    protected boolean checkForNotEnoughSubjects(SemesterPlan semesterPlan) {
 
-        for (SubjectRequirement requirement : semesterPlan.subjectRequirements()){
-            int count = 0;
+        for (SubjectRequirement requirement : semesterPlan.subjectRequirements()) {
+            int count = ZERO;
 
             for (UniversitySubject subject : semesterPlan.subjects()) {
                 if (subject.category().equals(requirement.category())) {
@@ -55,19 +69,19 @@ public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerA
         return false;
     }
 
-    protected boolean checkUniqueSubjectRequirements(SubjectRequirement[] subjectRequirements){
+    protected boolean areUniqueSubjectRequirements(SubjectRequirement[] subjectRequirements) {
         Category[] categoryValues = Category.values();
         int[] occurrences = new int[categoryValues.length];
 
         for (SubjectRequirement requirement : subjectRequirements) {
             Category category = requirement.category();
-            int index = 0;
+            int index = ZERO;
 
             for (Category match : categoryValues) {
-                if (match.equals(category)){
-                    occurrences[index] += 1;
+                if (match.equals(category)) {
+                    occurrences[index] += ONE;
                 }
-                if (occurrences[index] > 1){
+                if (occurrences[index] > ONE) {
                     return false;
                 }
                 index++;
@@ -77,21 +91,14 @@ public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerA
         return true;
     }
 
-    public int calculateJarCount(UniversitySubject[] subjects, int maximumSlackTime, int semesterDuration) throws IllegalArgumentException, DisappointmentException {
+    public int calculateJarCount(UniversitySubject[] subjects, int maximumSlackTime, int semesterDuration) {
 
-        if ( subjects == null ){
-            throw new IllegalArgumentException("Subjects are null");
-        }
-        else if ( maximumSlackTime <= 0 ) {
-            throw new IllegalArgumentException("MaximumSlackTime is not positive");
-        }
-        else if ( semesterDuration <= 0 ) {
-            throw new IllegalArgumentException("SemesterDuration is not positive");
-        }
+        checkConditionsForJarCount(subjects, maximumSlackTime, semesterDuration);
 
-        int sumOfBreak = 0, sumOfLearning = 0;
+        int sumOfBreak = ZERO;
+        int sumOfLearning = ZERO;
         for ( UniversitySubject subject : subjects ) {
-            sumOfBreak += Math.ceil((subject.neededStudyTime() * subject.category().coefficient()));
+            sumOfBreak += (int) Math.ceil((subject.neededStudyTime() * subject.category().getCoefficient()));
             sumOfLearning += subject.neededStudyTime();
         }
 
@@ -100,11 +107,10 @@ public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerA
             throw new DisappointmentException("Grandkid has too much free time");
         }
 
-        int jarsPerDays = Math.ceilDiv(sumOfLearning,DAYS_FOR_ONE_JAR);
-        if(freeTimeThisSemester < 0){
+        int jarsPerDays = Math.ceilDiv(sumOfLearning, DAYS_FOR_ONE_JAR);
+        if (freeTimeThisSemester < ZERO) {
             return jarsPerDays * DOUBLE;
-        }
-        else {
+        } else {
             return jarsPerDays;
         }
     }

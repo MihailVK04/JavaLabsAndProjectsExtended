@@ -10,13 +10,15 @@ package bg.sofia.uni.fmi.mjt.burnout.subject;
  */
 public record SubjectRequirement(Category category, int minAmountEnrolled) {
 
+    private static final int ZERO = 0;
+
     public SubjectRequirement {
 
         if (category == null) {
             throw new IllegalArgumentException("Category is left null");
         }
 
-        if (minAmountEnrolled < 0) {
+        if (minAmountEnrolled < ZERO) {
             throw new IllegalArgumentException("Minimum amount is negative");
         }
     }

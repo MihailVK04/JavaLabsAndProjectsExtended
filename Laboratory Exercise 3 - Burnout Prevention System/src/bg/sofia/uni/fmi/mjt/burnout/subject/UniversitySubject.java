@@ -15,19 +15,22 @@ package bg.sofia.uni.fmi.mjt.burnout.subject;
  */
 public record UniversitySubject(String name, int credits, int rating, Category category, int neededStudyTime) {
 
+    private static final int ZERO = 0;
+    private static final int FIVE = 5;
+
     public UniversitySubject {
 
         if (name == null) {
             throw new IllegalArgumentException("Name is null");
         } else if (name.isBlank()) {
-                throw new IllegalArgumentException("Name is blank");
+            throw new IllegalArgumentException("Name is blank");
         }
 
-        if (credits <= 0) {
+        if (credits <= ZERO) {
             throw new IllegalArgumentException("Credits are not positive");
         }
 
-        if (rating <= 0 || rating > 5) {
+        if (rating <= ZERO || rating > FIVE) {
             throw new IllegalArgumentException("Rating is not in bounds");
         }
 
@@ -35,7 +38,7 @@ public record UniversitySubject(String name, int credits, int rating, Category c
             throw new IllegalArgumentException("Category is left null");
         }
 
-        if(neededStudyTime <= 0) {
+        if (neededStudyTime <= ZERO) {
             throw new IllegalArgumentException("NeededStudyTime is not positive");
         }
     }
