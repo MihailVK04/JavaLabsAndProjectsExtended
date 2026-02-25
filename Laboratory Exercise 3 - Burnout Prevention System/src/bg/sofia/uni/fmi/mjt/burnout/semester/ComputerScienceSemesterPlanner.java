@@ -22,7 +22,7 @@ public final class ComputerScienceSemesterPlanner extends AbstractSemesterPlanne
     }
 
     private void checkSubjectListConditions(SemesterPlan semesterPlan) {
-        if (semesterPlan.subjects() == null) {
+        if (semesterPlan == null) {
             throw new IllegalArgumentException("Semester plan is missing or null");
         }
 
@@ -69,7 +69,6 @@ public final class ComputerScienceSemesterPlanner extends AbstractSemesterPlanne
 
     public UniversitySubject[] calculateSubjectList(SemesterPlan semesterPlan) throws
         InvalidSubjectRequirementsException {
-
         checkSubjectListConditions(semesterPlan);
 
         UniversitySubject[] result = new UniversitySubject[semesterPlan.subjects().length];
@@ -88,13 +87,14 @@ public final class ComputerScienceSemesterPlanner extends AbstractSemesterPlanne
                 index++;
             }
             if (credits > semesterPlan.minimalAmountOfCredits() && allRequirementsAreMet(requirementsAmountMap)) {
+                result = resizeToOnlySubjects(result);
                 return result;
             }
         }
-
         if (!allRequirementsAreMet(requirementsAmountMap) && credits < semesterPlan.minimalAmountOfCredits()) {
             throw new CryToStudentsDepartmentException("Student cannot meet all his requirements");
         } else {
+            result = resizeToOnlySubjects(result);
             return result;
         }
     }

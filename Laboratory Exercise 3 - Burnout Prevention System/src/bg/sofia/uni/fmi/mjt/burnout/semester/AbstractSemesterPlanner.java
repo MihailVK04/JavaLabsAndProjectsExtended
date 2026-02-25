@@ -14,6 +14,23 @@ public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerA
     private static final int DAYS_FOR_ONE_JAR = 5;
     private static final int DOUBLE = 2;
 
+    protected UniversitySubject[] resizeToOnlySubjects(UniversitySubject[] result) {
+        int size = ZERO;
+        for (UniversitySubject subject : result) {
+            if (subject != null) {
+                size++;
+            } else {
+                break;
+            }
+        }
+        if (size == ZERO) {
+            return null;
+        }
+        UniversitySubject[] correctResult = new UniversitySubject[size];
+        System.arraycopy(result, ZERO, correctResult, ZERO, size);
+        return correctResult;
+    }
+
     private void checkConditionsForJarCount(UniversitySubject[] subjects, int maximumSlackTime, int semesterDuration) {
         if ( subjects == null ) {
             throw new IllegalArgumentException("Subjects are null");
@@ -48,7 +65,7 @@ public abstract sealed class AbstractSemesterPlanner implements SemesterPlannerA
     protected int concatUniversitySubjectsArrays(UniversitySubject[] destination, UniversitySubject[] arrayForConcat,
                                                  int size) {
         System.arraycopy(arrayForConcat, ZERO, destination, size, arrayForConcat.length);
-        return size + arrayForConcat.length - ONE;
+        return size + arrayForConcat.length;
     }
 
     protected boolean checkForNotEnoughSubjects(SemesterPlan semesterPlan) {

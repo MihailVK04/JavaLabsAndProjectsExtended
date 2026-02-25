@@ -12,7 +12,7 @@ public final class SoftwareEngineeringSemesterPlanner extends AbstractSemesterPl
     private static final int ONE = 1;
 
     private void checkSubjectListConditions(SemesterPlan semesterPlan) {
-        if (semesterPlan.subjects() == null) {
+        if (semesterPlan == null) {
             throw new IllegalArgumentException("Semester plan is missing or null");
         }
 
@@ -60,12 +60,13 @@ public final class SoftwareEngineeringSemesterPlanner extends AbstractSemesterPl
         }
 
         int credits = ZERO;
-        for ( int i = ZERO; i <= size; i++) {
+        for ( int i = ZERO; i < size; i++) {
             credits += result[i].credits();
         }
 
         for ( int i = size; i <= (semesterPlan.subjects().length - ONE); i++) {
             if ( credits >= semesterPlan.minimalAmountOfCredits()) {
+                result = resizeToOnlySubjects(result);
                 return result;
             }
             credits = addSubjectsForCoveringCredits(result, semesterPlan.subjects(), i, credits);
@@ -73,6 +74,7 @@ public final class SoftwareEngineeringSemesterPlanner extends AbstractSemesterPl
         if ( credits < semesterPlan.minimalAmountOfCredits()) {
             throw new CryToStudentsDepartmentException("Student cant reach credit limit with the subjects");
         }
+        result = resizeToOnlySubjects(result);
         return result;
     }
 }
