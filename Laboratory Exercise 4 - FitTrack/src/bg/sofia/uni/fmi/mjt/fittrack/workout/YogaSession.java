@@ -2,7 +2,7 @@ package bg.sofia.uni.fmi.mjt.fittrack.workout;
 
 import bg.sofia.uni.fmi.mjt.fittrack.exception.InvalidWorkoutException;
 
-public final class YogaSession implements Workout{
+public final class YogaSession implements Workout {
     private static final int ZERO = 0;
     private static final int MINIMUM_DIFFICULTY = 1;
     private static final int MAXIMUM_DIFFICULTY = 5;
