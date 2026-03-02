@@ -14,8 +14,10 @@ public class WorkoutOptimalComparator implements Comparator<Workout> {
             return Integer.compare(o2.getDifficulty(), o1.getDifficulty());
         } else if (o1.getDuration() != o2.getDuration()) {
             return Integer.compare(o2.getDuration(), o1.getDuration());
-        } else {
+        } else if (!o1.getName().equals(o2.getName())) {
             return o1.getName().compareTo(o2.getName());
+        } else {
+            return o1.getType().compareTo(o2.getType());
         }
     }
 }

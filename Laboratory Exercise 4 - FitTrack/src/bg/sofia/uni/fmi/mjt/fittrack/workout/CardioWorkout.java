@@ -27,7 +27,7 @@ public final class CardioWorkout implements Workout {
         }
     }
 
-    CardioWorkout(String name, int duration, int caloriesBurned, int difficulty) {
+    public CardioWorkout(String name, int duration, int caloriesBurned, int difficulty) {
         validateData(name, duration, caloriesBurned, difficulty);
         this.name = name;
         this.duration = duration;

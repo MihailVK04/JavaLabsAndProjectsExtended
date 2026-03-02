@@ -26,7 +26,7 @@ public final class StrengthWorkout implements Workout {
         }
     }
 
-    StrengthWorkout(String name, int duration, int caloriesBurned, int difficulty) {
+    public StrengthWorkout(String name, int duration, int caloriesBurned, int difficulty) {
         validateData(name, duration, caloriesBurned, difficulty);
         this.name = name;
         this.duration = duration;

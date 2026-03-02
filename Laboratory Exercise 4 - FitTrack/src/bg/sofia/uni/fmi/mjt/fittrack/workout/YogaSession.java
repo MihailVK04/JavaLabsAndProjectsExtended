@@ -26,7 +26,7 @@ public final class YogaSession implements Workout {
         }
     }
 
-    YogaSession(String name, int duration, int caloriesBurned, int difficulty) {
+    public YogaSession(String name, int duration, int caloriesBurned, int difficulty) {
         validateData(name, duration, caloriesBurned, difficulty);
         this.name = name;
         this.duration = duration;
