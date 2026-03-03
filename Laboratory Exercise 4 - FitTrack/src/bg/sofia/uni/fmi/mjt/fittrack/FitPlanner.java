@@ -50,7 +50,7 @@ public class FitPlanner implements FitPlannerAPI {
             throw new IllegalArgumentException("Filters is empty");
         }
 
-        Set<Workout> result = new HashSet<>(availableWorkouts);
+        List<Workout> result = new ArrayList<>(availableWorkouts);
         for (WorkoutFilter filter : filters) {
             Iterator<Workout> it = result.iterator();
             while (it.hasNext()) {
