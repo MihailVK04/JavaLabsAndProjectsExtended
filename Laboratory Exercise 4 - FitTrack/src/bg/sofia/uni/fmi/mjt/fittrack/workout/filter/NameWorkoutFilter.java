@@ -8,6 +8,13 @@ public class NameWorkoutFilter implements WorkoutFilter {
     private final boolean caseSensitive;
 
     /**
+     * Constructor for basic case of the name workout filter
+     */
+    public NameWorkoutFilter(String keyword) {
+        this(keyword, false);
+    }
+
+    /**
      * Workout filter for the names. If
      * @param caseSensitive is true the filter will try to perfectly match the name.
      */
