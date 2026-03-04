@@ -62,6 +62,13 @@ public class DeferredEventSubscriber<T extends Event<?>> implements Subscriber<T
 //        throw new UnsupportedOperationException("Still not implemented");
     }
 
+    /**
+     * Should not be a part of the class. Only for test purposes.
+     * */
+    public void setForTest(Set<T> events) {
+        unprocessedEventCollection = events;
+    }
+
 }
 
 class EventsByPriorityAndTimestampComparator<T extends Event<?>> implements Comparator<T> {
@@ -84,8 +91,7 @@ class EventsByPriorityAndTimestampComparator<T extends Event<?>> implements Comp
             return timestampCompare;
         } else if (sourceCompare != COMPARE_EQUALS_VALUE) {
             return sourceCompare;
-        } else if (Integer.compare(event1.getPayload().getSize(), event2.getPayload().getSize())
-            != COMPARE_EQUALS_VALUE) {
+        } else if (event1.getPayload().getSize() != event2.getPayload().getSize()) {
             return Integer.compare(event1.getPayload().getSize(), event2.getPayload().getSize());
         }
         return COMPARE_GREATER_VALUE;
