@@ -1,3 +1,5 @@
+package tasks.task1;
+
 public class Car {
     String brand;
     String model;
