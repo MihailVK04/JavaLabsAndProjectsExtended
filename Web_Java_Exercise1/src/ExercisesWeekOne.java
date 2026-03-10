@@ -1,8 +1,18 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Utility class for comments
@@ -672,6 +682,169 @@ public class ExercisesWeekOne {
         arr[0] = 999; // modifies the actual heap object
     }
 
+    // Generic class
+    static class Pair<A, B> {
+        private A first;
+        private B second;
+
+        Pair(A first, B second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        A getFirst()  { return first; }
+        B getSecond() { return second; }
+
+        @Override
+        public String toString() {
+            return "(" + first + ", " + second + ")";
+        }
+    }
+
+    // Generic method
+    static <T> void printArray(T[] arr) {
+        for (T item : arr) System.out.print(item + " ");
+        System.out.println();
+    }
+
+    static class Stack<T> {
+        private ArrayList<T> data = new ArrayList<>();
+
+        void push(T item) {
+            data.add(item);
+        }
+
+        T pop() {
+            if (isEmpty()) throw new RuntimeException("Stack is empty");
+            return data.remove(data.size() - 1);
+        }
+
+        T peek() {
+            if (isEmpty()) throw new RuntimeException("Stack is empty");
+            return data.get(data.size() - 1);
+        }
+
+        boolean isEmpty() { return data.isEmpty(); }
+        int     size()    { return data.size(); }
+
+        @Override
+        public String toString() { return data.toString(); }
+    }
+
+    // Swap two elements in any array
+    static <T> void swap(T[] arr, int i, int j) {
+        T temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    // Max element — T must be Comparable
+    static <T extends Comparable<T>> T max(List<T> list) {
+        if (list.isEmpty()) throw new NoSuchElementException();
+        T result = list.get(0);
+        for (T item : list)
+            if (item.compareTo(result) > 0) result = item;
+        return result;
+    }
+
+    // Array to List
+    static <T> List<T> toList(T[] arr) {
+        return new ArrayList<>(Arrays.asList(arr));
+    }
+
+    // Upper bound: T must be Number or a subclass
+    static class NumberBox<T extends Number> {
+        private T value;
+
+        NumberBox(T value) { this.value = value; }
+
+        double doubled()  { return value.doubleValue() * 2; }
+        boolean isWhole() { return value.doubleValue() == Math.floor(value.doubleValue()); }
+
+        @Override
+        public String toString() { return "NumberBox[" + value + "]"; }
+    }
+
+    // Sum a list of any numeric type
+    static <T extends Number> double sum(List<T> list) {
+        double total = 0;
+        for (T item : list) total += item.doubleValue();
+        return total;
+    }
+
+    // Unbounded: reads anything as Object
+    static void printList(List<?> list) {
+        for (Object o : list) System.out.print(o + " ");
+        System.out.println();
+    }
+
+    // Upper bounded: reads Numbers (producer — use extends)
+    static double sumList(List<? extends Number> list) {
+        double sum = 0;
+        for (Number n : list) sum += n.doubleValue();
+        return sum;
+    }
+
+    // Lower bounded: adds Integers into a list (consumer — use super)
+    static void addIntegers(List<? super Integer> list, int count) {
+        for (int i = 1; i <= count; i++) list.add(i);
+    }
+
+    static class Box<T> {
+        private T value;
+        Box(T v) { this.value = v; }
+        T get()  { return value; }
+    }
+
+    static <T> void printTyped(T value, Class<T> clazz) {
+        System.out.println("Value: " + value + " | Type: " + clazz.getSimpleName());
+    }
+
+    static class Container<T> {
+        private T value;
+        // private static T staticField; // COMPILE ERROR — cannot use T in static context
+
+        Container(T value) { this.value = value; }
+
+        void demo() {
+            // Cannot do: T obj = new T(); — COMPILE ERROR
+            // Cannot do: T[] arr = new T[10]; — COMPILE ERROR
+            // Cannot do: if (value instanceof T) — COMPILE ERROR
+
+            // Workaround: use Object array and cast (like ArrayList does internally)
+            Object[] rawArr = new Object[5];
+            rawArr[0] = value;
+            System.out.println("Raw array[0]: " + rawArr[0]);
+        }
+    }
+
+    @FunctionalInterface
+    interface MathOperation {
+        int operate(int a, int b);
+    }
+
+    static int doubleIt(int n) { return n * 2; }
+
+    static class Greeter {
+        String prefix;
+        Greeter(String p) { this.prefix = p; }
+        void greet(String name) { System.out.println(prefix + name); }
+    }
+
+    record Employee(String name, double salary) {}
+
+    record Person(String name, String city, int age) {}
+
+    static Optional<String> findUser(int id) {
+        Map<Integer, String> db = Map.of(1, "Alice", 2, "Bob", 3, "Carol");
+        return Optional.ofNullable(db.get(id));
+    }
+
+    static Optional<String> getEmail(String name) {
+        Map<String, String> emails = Map.of("Alice", "alice@example.com");
+        return Optional.ofNullable(emails.get(name));
+    }
+
     public static void main() {
         variableAndDataTypes();
         primitiveTypes();
@@ -755,6 +928,383 @@ public class ExercisesWeekOne {
         int[] b = {1, 2, 3};
         mutate(b);
         System.out.println("After mutate   : " + Arrays.toString(b)); // [999,2,3]
+
+        Pair<String, Integer> p1 = new Pair<>("Alice", 30);
+        Pair<Double, Boolean> p2 = new Pair<>(3.14, true);
+
+        System.out.println("Pair 1: " + p1);
+        System.out.println("Name  : " + p1.getFirst());
+        System.out.println("Age   : " + p1.getSecond());
+        System.out.println("Pair 2: " + p2);
+
+        Integer[] nums    = {1, 2, 3, 4, 5};
+        String[]  fruits  = {"Apple", "Mango", "Cherry"};
+        System.out.print("Ints   : "); printArray(nums);
+        System.out.print("Strings: "); printArray(fruits);
+
+        Stack<String> words = new Stack<>();
+        words.push("Java");
+        words.push("is");
+        words.push("fun");
+        System.out.println("Stack  : " + words);
+        System.out.println("Peek   : " + words.peek());
+        System.out.println("Pop    : " + words.pop());
+        System.out.println("After  : " + words);
+
+        Stack<Integer> nums1 = new Stack<>();
+        for (int i = 1; i <= 5; i++) nums1.push(i * 10);
+        System.out.println("\nNums   : " + nums1);
+        System.out.println("Size   : " + nums1.size());
+        while (!nums1.isEmpty()) System.out.print(nums1.pop() + " ");
+        System.out.println();
+
+        Integer[] nums2 = {1, 2, 3, 4, 5};
+        System.out.println("Before swap: " + Arrays.toString(nums2));
+        swap(nums2, 0, 4);
+        System.out.println("After swap : " + Arrays.toString(nums2));
+
+        List<Integer> ints    = Arrays.asList(3, 1, 4, 1, 5, 9, 2, 6);
+        List<String>  strings = Arrays.asList("banana", "apple", "cherry");
+        System.out.println("Max int    : " + max(ints));
+        System.out.println("Max string : " + max(strings));
+
+        String[] fruits1 = {"Mango", "Kiwi", "Peach"};
+        List<String> fruitList = toList(fruits1);
+        System.out.println("As list    : " + fruitList);
+
+        NumberBox<Integer> intBox    = new NumberBox<>(42);
+        NumberBox<Double>  dblBox    = new NumberBox<>(3.14);
+        NumberBox<Long>    longBox   = new NumberBox<>(100L);
+
+        System.out.println(intBox  + " doubled=" + intBox.doubled()  + " whole=" + intBox.isWhole());
+        System.out.println(dblBox  + " doubled=" + dblBox.doubled()  + " whole=" + dblBox.isWhole());
+        System.out.println(longBox + " doubled=" + longBox.doubled() + " whole=" + longBox.isWhole());
+
+        List<Integer> ints1    = List.of(1, 2, 3, 4, 5);
+        List<Double>  doubles = List.of(1.5, 2.5, 3.0);
+        System.out.println("\nSum ints   : " + sum(ints1));
+        System.out.println("Sum doubles: " + sum(doubles));
+
+        List<Integer> ints2    = Arrays.asList(1, 2, 3);
+        List<Double>  doubles1 = Arrays.asList(1.5, 2.5, 3.0);
+        List<String>  strings1 = Arrays.asList("a", "b", "c");
+
+        System.out.print("Ints   : "); printList(ints2);
+        System.out.print("Doubles: "); printList(doubles1);
+        System.out.print("Strings: "); printList(strings1);
+
+        System.out.println("Sum ints   : " + sumList(ints2));
+        System.out.println("Sum doubles: " + sumList(doubles1));
+
+        List<Number> numbers = new ArrayList<>();
+        addIntegers(numbers, 5);
+        System.out.println("Added to Number list: " + numbers);
+
+        Box<String>  sBox = new Box<>("Hello");
+        Box<Integer> iBox = new Box<>(42);
+
+        // At runtime, both are just "Box" — type info is erased
+        System.out.println("Same class? " + (sBox.getClass() == iBox.getClass())); // true
+        System.out.println("Class name : " + sBox.getClass().getName());
+
+        // Cannot use instanceof with generic types
+        // if (sBox instanceof Box<String>) — COMPILE ERROR
+        // Use raw type instead:
+        System.out.println("Is Box?    : " + (sBox instanceof Box));
+
+        // Lists also share the same raw type
+        List<String>  ls = new ArrayList<>();
+        List<Integer> li = new ArrayList<>();
+        System.out.println("Same list class: " + (ls.getClass() == li.getClass())); // true
+
+        // Workaround: pass Class<T> token to get type at runtime
+        System.out.println("\nUsing class token:");
+        printTyped("World", String.class);
+        printTyped(100,     Integer.class);
+
+        // Cannot use primitives as type arguments
+        // Container<int> bad = new Container<>(5); // COMPILE ERROR
+        Container<Integer> ok = new Container<>(5); // use wrapper
+        ok.demo();
+
+        // Generic arrays are not allowed
+        // List<String>[] arr = new ArrayList<String>[5]; // COMPILE ERROR
+        // Workaround: use a raw type or List of Lists
+        @SuppressWarnings("unchecked")
+        List<String>[] workaround = new ArrayList[5]; // unchecked warning
+        workaround[0] = new ArrayList<>();
+        workaround[0].add("OK");
+        System.out.println("Array workaround: " + workaround[0]);
+
+        // Overloading by erasure is forbidden
+        // void process(List<String> l) {}
+        // void process(List<Integer> l) {} // COMPILE ERROR — same erasure
+        System.out.println("\nGeneric restrictions demonstrated.");
+
+        // Runnable (no params, no return)
+        Runnable r = () -> System.out.println("Running!");
+        r.run();
+
+        // MathOperation — various syntax forms
+        MathOperation add      = (c, d) -> c + d;
+        MathOperation multiply = (c, d) -> c * d;
+        MathOperation max      = (c, d) -> { return c > d ? c : d; }; // block body
+
+        System.out.println("5 + 3 = " + add.operate(5, 3));
+        System.out.println("5 * 3 = " + multiply.operate(5, 3));
+        System.out.println("max(5,3) = " + max.operate(5, 3));
+
+        // Comparator for sorting
+        List<String> names = new ArrayList<>(Arrays.asList("Charlie", "Alice", "Bob", "Dave"));
+        names.sort((c, d) -> c.compareTo(d));          // ascending
+        System.out.println("Sorted asc : " + names);
+        names.sort((c, d) -> d.compareTo(c));          // descending
+        System.out.println("Sorted desc: " + names);
+
+        // Capturing effectively final variable
+        String prefix = "Hello, ";
+        names.forEach(name -> System.out.println(prefix + name));
+
+        // 1. Static method reference: ClassName::staticMethod
+        Function<Integer, Integer> dbl = ExercisesWeekOne::doubleIt;
+        System.out.println("Double 5: " + dbl.apply(5));
+
+        // 2. Instance method on a particular object: instance::method
+        Greeter g = new Greeter("Hello, ");
+        Consumer<String> greet = g::greet;
+        greet.accept("Alice");
+
+        // 3. Instance method on arbitrary object: ClassName::instanceMethod
+        List<String> names1 = Arrays.asList("Charlie", "Alice", "Bob");
+        names1.sort(String::compareTo);          // equivalent to (a,b) -> a.compareTo(b)
+        System.out.println("Sorted: " + names1);
+
+        // 4. Constructor reference: ClassName::new
+        Supplier<ArrayList<String>> listFactory = ArrayList::new;
+        ArrayList<String> list = listFactory.get();
+        list.add("Java");
+        list.add("Rocks");
+        System.out.println("List: " + list);
+
+        // Common use — println as consumer
+        names.forEach(System.out::println);
+
+        // Create stream from List
+        List<Integer> nums3 = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        // filter + forEach
+        System.out.print("Even numbers: ");
+        nums3.stream()
+            .filter(n1 -> n1 % 2 == 0)
+            .forEach(n1 -> System.out.print(n1 + " "));
+        System.out.println();
+
+        // map + collect
+        List<Integer> squared = nums3.stream()
+            .map(n1 -> n1 * n1)
+            .collect(Collectors.toList());
+        System.out.println("Squared: " + squared);
+
+        // Stream from array
+        int[] arr = {5, 3, 8, 1, 9, 2};
+        int sum = Arrays.stream(arr).sum();
+        System.out.println("Array sum: " + sum);
+
+        // Streams are single-use!
+        Stream<Integer> stream = nums3.stream().filter(n1 -> n1 > 5);
+        System.out.println("Count > 5: " + stream.count());
+        // stream.count() again would throw IllegalStateException
+
+        List<Employee> employees = List.of(
+            new Employee("Alice",  85_000),
+            new Employee("Bob",    42_000),
+            new Employee("Carol",  95_000),
+            new Employee("Dave",   67_000),
+            new Employee("Eve",   110_000),
+            new Employee("Frank",  38_000)
+        );
+
+        // Full pipeline: filter → sort → map → limit → collect
+        List<String> result = employees.stream()
+            .filter(e -> e.salary() > 60_000)           // keep high earners
+            .sorted(Comparator.comparingDouble(Employee::salary).reversed()) // highest first
+            .map(e -> e.name().toUpperCase())            // extract & format name
+            .limit(3)                                    // top 3
+            .collect(Collectors.toList());
+
+        System.out.println("Top 3 high earners: " + result);
+
+        // Count, min, max using streams
+        OptionalDouble avg = employees.stream()
+            .mapToDouble(Employee::salary)
+            .average();
+        System.out.printf("Avg salary: $%.0f%n", avg.orElse(0));
+
+        double maxSalary = employees.stream()
+            .mapToDouble(Employee::salary)
+            .max()
+            .orElse(0);
+        System.out.printf("Max salary: $%.0f%n", maxSalary);
+
+        List<Integer> nums4 = Arrays.asList(5, 3, 8, 1, 9, 2, 3, 7, 5, 1);
+
+        // filter — keep elements matching predicate
+        System.out.print("filter > 4: ");
+        nums4.stream().filter(n1 -> n1 > 4).forEach(n1 -> System.out.print(n1 + " "));
+        System.out.println();
+
+        // map — transform each element
+        System.out.print("map *2    : ");
+        nums4.stream().map(n1 -> n1 * 2).forEach(n1 -> System.out.print(n1 + " "));
+        System.out.println();
+
+        // distinct — remove duplicates
+        System.out.print("distinct  : ");
+        nums4.stream().distinct().forEach(n1 -> System.out.print(n1 + " "));
+        System.out.println();
+
+        // sorted — natural order
+        System.out.print("sorted    : ");
+        nums4.stream().distinct().sorted().forEach(n1 -> System.out.print(n1 + " "));
+        System.out.println();
+
+        // limit + skip — pagination
+        List<Integer> page2 = nums4.stream().distinct().sorted()
+            .skip(3).limit(3).collect(Collectors.toList());
+        System.out.println("skip3,lim3: " + page2);
+
+        // flatMap — flatten nested collections
+        List<List<Integer>> nested = List.of(List.of(1, 2), List.of(3, 4), List.of(5));
+        List<Integer> flat = nested.stream()
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+        System.out.println("flatMap   : " + flat);
+
+        // peek — inspect without consuming (useful for debugging)
+        long count = nums4.stream()
+            .filter(n1 -> n1 > 3)
+            .peek(n1 -> System.out.print("peek:" + n1 + " "))
+            .count();
+        System.out.println(" count > 3 : " + count);
+
+        List<Integer> nums5 = Arrays.asList(4, 7, 2, 9, 1, 5, 8, 3, 6);
+
+        System.out.println("count      : " + nums5.stream().count());
+        System.out.println("sum        : " + nums5.stream().mapToInt(Integer::intValue).sum());
+        System.out.println("min        : " + nums5.stream().mapToInt(Integer::intValue).min().getAsInt());
+        System.out.println("max        : " + nums5.stream().mapToInt(Integer::intValue).max().getAsInt());
+        System.out.printf ("average    : %.2f%n", nums5.stream().mapToInt(Integer::intValue).average().getAsDouble());
+
+        System.out.println("anyMatch>8 : " + nums5.stream().anyMatch(n1 -> n1 > 8));
+        System.out.println("allMatch>0 : " + nums5.stream().allMatch(n1 -> n1 > 0));
+        System.out.println("noneMatch<0: " + nums5.stream().noneMatch(n1 -> n1 < 0));
+
+        Optional<Integer> first = nums5.stream().filter(n1 -> n1 > 5).findFirst();
+        System.out.println("findFirst>5: " + first.orElse(-1));
+
+        // reduce — combine all elements into one value
+        int product = nums5.stream().reduce(1, (c, d) -> c * d);
+        System.out.println("reduce (*) : " + product);
+
+        String joined = List.of("Java","is","great").stream()
+            .reduce("", (c, d) -> c.isEmpty() ? d : c + " " + d);
+        System.out.println("reduce (+) : " + joined);
+
+        List<Person> people = List.of(
+            new Person("Alice", "Munich",  30),
+            new Person("Bob",   "Berlin",  25),
+            new Person("Carol", "Munich",  35),
+            new Person("Dave",  "Berlin",  28),
+            new Person("Eve",   "Hamburg", 22)
+        );
+
+        // toList / toSet
+        List<String> names2 = people.stream().map(Person::name).collect(Collectors.toList());
+        System.out.println("Names: " + names2);
+
+        // joining
+        String joined1 = people.stream().map(Person::name).collect(Collectors.joining(", ", "[", "]"));
+        System.out.println("Joined: " + joined1);
+
+        // groupingBy
+        Map<String, List<Person>> byCity = people.stream().collect(Collectors.groupingBy(Person::city));
+        byCity.forEach((city, ps) ->
+            System.out.println(city + ": " + ps.stream().map(Person::name).collect(Collectors.joining(", "))));
+
+        // counting per group
+        Map<String, Long> countByCity = people.stream().collect(Collectors.groupingBy(Person::city, Collectors.counting()));
+        System.out.println("Count: " + countByCity);
+
+        // partitioningBy
+        Map<Boolean, List<String>> byAdult = people.stream()
+            .collect(Collectors.partitioningBy(p -> p.age() >= 30, Collectors.mapping(Person::name, Collectors.toList())));
+        System.out.println(">=30 : " + byAdult.get(true));
+        System.out.println("< 30 : " + byAdult.get(false));
+
+        // summarizingInt
+        IntSummaryStatistics stats = people.stream().collect(Collectors.summarizingInt(Person::age));
+        System.out.printf("Age stats: min=%d max=%d avg=%.1f%n", stats.getMin(), stats.getMax(), stats.getAverage());
+
+        List<Integer> bigList = IntStream.rangeClosed(1, 1_000_000)
+            .boxed().collect(Collectors.toList());
+
+        // Sequential
+        long t1 = System.currentTimeMillis();
+        long seqSum = bigList.stream()
+            .mapToLong(Integer::longValue).sum();
+        long seqTime = System.currentTimeMillis() - t1;
+
+        // Parallel
+        long t2 = System.currentTimeMillis();
+        long parSum = bigList.parallelStream()
+            .mapToLong(Integer::longValue).sum();
+        long parTime = System.currentTimeMillis() - t2;
+
+        System.out.println("Sequential sum : " + seqSum + " (" + seqTime + "ms)");
+        System.out.println("Parallel sum   : " + parSum + " (" + parTime + "ms)");
+
+        // Ordering: sequential preserves order, parallel may not
+        System.out.print("Sequential: ");
+        IntStream.range(0, 5).forEach(i -> System.out.print(i + " "));
+        System.out.println();
+
+        System.out.print("Parallel  : ");
+        IntStream.range(0, 5).parallel().forEach(i -> System.out.print(i + " "));
+        System.out.println("(order may vary)");
+
+        // forEachOrdered restores order in parallel
+        System.out.print("Ordered   : ");
+        IntStream.range(0, 5).parallel().forEachOrdered(i -> System.out.print(i + " "));
+        System.out.println();
+
+        // Creating Optional
+        Optional<String> present = Optional.of("Hello");
+        Optional<String> empty   = Optional.empty();
+        Optional<String> nullable = Optional.ofNullable(null);
+
+        System.out.println("present.isPresent(): " + present.isPresent());
+        System.out.println("empty.isEmpty()     : " + empty.isEmpty());     // Java 11+
+
+        // get / orElse / orElseGet / orElseThrow
+        System.out.println("present.get()       : " + present.get());
+        System.out.println("empty.orElse(\"??\")   : " + empty.orElse("??"));
+        System.out.println("orElseGet           : " + empty.orElseGet(() -> "computed"));
+
+        // ifPresent
+        present.ifPresent(v -> System.out.println("ifPresent: " + v));
+
+        // map and filter
+        Optional<Integer> length = present.map(String::length);
+        System.out.println("map to length       : " + length.orElse(0));
+
+        Optional<String> upper = present.filter(s -> s.length() > 3).map(String::toUpperCase);
+        System.out.println("filter+map          : " + upper.orElse("short"));
+
+        // Chaining Optionals with flatMap
+        Optional<String> email = findUser(1).flatMap(ExercisesWeekOne::getEmail);
+        System.out.println("\nUser 1 email: " + email.orElse("not found"));
+        Optional<String> email2 = findUser(2).flatMap(ExercisesWeekOne::getEmail);
+        System.out.println("User 2 email: " + email2.orElse("not found"));
     }
 }
 
