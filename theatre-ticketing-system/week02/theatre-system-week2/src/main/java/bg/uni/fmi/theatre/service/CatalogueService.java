@@ -91,7 +91,7 @@ public class CatalogueService {
         return performanceRepository.save(performance);
     }
 
-    public List<Performance> findPerformanceByShow(Long showId) {
+    public List<Performance> findPerformancesByShow(Long showId) {
         if (showId == null) {
             throw new IllegalArgumentException("ShowId is required!");
         } else if (!showRepository.existsById(showId)) {
