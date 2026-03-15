@@ -1,0 +1,2 @@
+# Exercise Week 1 - Java Web
+Условието на задачките и решенията към първото упражнение се намират в файла java_tasks_interactive.html, а ето и [линк](https://github.com/lacho55/Web-Development-With-JAVA-2026/tree/main/week01-java) към репото на курса.

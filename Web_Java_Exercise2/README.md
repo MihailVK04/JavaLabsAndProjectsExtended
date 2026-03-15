@@ -1,0 +1,2 @@
+# Exercise Week 2 - Java Web
+Условието на задачките и решенията към първото упражнение се намират в файла oop_solid_tasks.html, а ето и [линк](https://github.com/lacho55/Web-Development-With-JAVA-2026/tree/main/week02-java-git) към репото на курса.
