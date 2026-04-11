@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 @Profile("prod")
-public class FileAppLogger implements AppLogger{
+public class FileAppLogger implements AppLogger {
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final LogLevel configuredLevel;
     private final String logFilePath;

@@ -34,7 +34,9 @@ public class StartupEnvironmentLogger implements ApplicationRunner {
             .filter(name -> {
                 try {
                     return ctx.getBean(name).getClass().getPackageName().startsWith("bg.uni.fmi.theatre");
-                } catch (Exception e) {return false; }
+                } catch (Exception e) {
+                    return false;
+                }
             })
             .forEach(name -> logger.debug(" bean: " + name));
     }

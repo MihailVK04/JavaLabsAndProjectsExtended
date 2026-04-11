@@ -65,7 +65,8 @@ public class ShowService {
     public PageResponse<ShowResponse> searchShows(String titleQuery, Genre genre, int page, int size) {
         if (page < ZERO) {
             throw new ValidationException("page must not be negative");
-        } if (size <= ZERO) {
+        }
+        if (size <= ZERO) {
             throw new ValidationException("size must be positive");
         }
 

@@ -8,8 +8,10 @@ import jakarta.validation.constraints.Size;
 
 public class ShowRequest {
 
+    private static final int ANNOTATION_SIZE = 100;
+
     @NotBlank(message = "title is required")
-    @Size(max = 100, message = "title must be at most 100 characters")
+    @Size(max = ANNOTATION_SIZE, message = "title must be at most 100 characters")
     private String title;
     private String description;
     private Genre genre;
