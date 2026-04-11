@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 @Profile("dev")
-public class ConsoleAppLogger implements AppLogger{
+public class ConsoleAppLogger implements AppLogger {
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final LogLevel configuredLevel;

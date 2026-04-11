@@ -1,15 +1,15 @@
 package bg.uni.fmi.theatre.service;
 
-import bg.uni.fmi.theatre.domain.Performance;
-import bg.uni.fmi.theatre.domain.Show;
-import bg.uni.fmi.theatre.repository.PerformanceRepository;
-import bg.uni.fmi.theatre.repository.ShowRepository;
-import bg.uni.fmi.theatre.vo.Genre;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+//import bg.uni.fmi.theatre.domain.Performance;
+//import bg.uni.fmi.theatre.domain.Show;
+//import bg.uni.fmi.theatre.repository.PerformanceRepository;
+//import bg.uni.fmi.theatre.repository.ShowRepository;
+//import bg.uni.fmi.theatre.vo.Genre;
+//
+//import java.util.Comparator;
+//import java.util.List;
+//import java.util.Optional;
+//import java.util.stream.Collectors;
 
 @Deprecated
 public class CatalogueService {
@@ -24,7 +24,8 @@ public class CatalogueService {
 //        this(showRepository, performanceRepository, PAGE_SIZE_BY_DEFAULT);
 //    }
 //
-//    public CatalogueService(ShowRepository showRepository, PerformanceRepository performanceRepository, int pageSize) {
+//    public CatalogueService(ShowRepository showRepository, PerformanceRepository performanceRepository,
+//    int pageSize) {
 //        if (showRepository == null) {
 //            throw new IllegalArgumentException("ShowRepository is required!");
 //        } else if (performanceRepository == null) {

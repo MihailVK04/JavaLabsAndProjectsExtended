@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "theatre")
 public class TheatreProperties {
 
-    private int reservationHoldMinutes = 15;
-    private int defaultPageSize = 10;
+    private static final int RESERVATION_HOLD_MINUTES_INIT = 15;
+    private static final int DEFAULT_PAGE_SIZE_INIT = 10;
+    private int reservationHoldMinutes = RESERVATION_HOLD_MINUTES_INIT;
+    private int defaultPageSize = DEFAULT_PAGE_SIZE_INIT;
     private LogLevel logLevel = LogLevel.INFO;
     private String logFile = "logs/theatre.log";
 
