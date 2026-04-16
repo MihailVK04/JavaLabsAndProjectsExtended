@@ -2,6 +2,7 @@ package bg.uni.fmi.theatre.repository.inmemory;
 
 import bg.uni.fmi.theatre.domain.Performance;
 import bg.uni.fmi.theatre.repository.PerformanceRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+@Repository
 public class InMemoryPerformanceRepository implements PerformanceRepository {
 
     private final Map<Long, Performance> store = new HashMap<>();
