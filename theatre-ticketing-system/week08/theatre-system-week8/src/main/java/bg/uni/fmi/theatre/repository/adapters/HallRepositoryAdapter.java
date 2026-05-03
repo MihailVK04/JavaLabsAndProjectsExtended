@@ -31,8 +31,8 @@ public class HallRepositoryAdapter implements HallRepository {
 
     @Override
     public List<Hall> findAll() {
-        return hallJpaRepository.findAll().stream().
-            map(HallEntity::toHall)
+        return hallJpaRepository.findAll().stream()
+            .map(HallEntity::toHall)
             .toList();
     }
 

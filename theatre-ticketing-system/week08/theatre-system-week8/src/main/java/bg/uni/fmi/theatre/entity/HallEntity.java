@@ -21,7 +21,9 @@ public class HallEntity {
     @Column(nullable = false, length = NAME_LENGTH)
     private String name;
 
-    protected HallEntity() {}
+    protected HallEntity() {
+
+    }
 
     public static HallEntity from(Hall hall) {
         HallEntity e = new HallEntity();

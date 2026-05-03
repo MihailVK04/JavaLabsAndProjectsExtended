@@ -34,7 +34,9 @@ public class PerformanceEntity {
     @Column(name = "status")
     private PerformanceStatus status;
 
-    protected  PerformanceEntity() {}
+    protected  PerformanceEntity() {
+
+    }
 
     public static PerformanceEntity from(Performance performance) {
         PerformanceEntity e = new PerformanceEntity();

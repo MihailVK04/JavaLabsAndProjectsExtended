@@ -24,7 +24,7 @@ public class Show {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = MAX_TITLE_LENGTH)
     private String title;
 
     @Column(columnDefinition = "TEXT")
@@ -40,7 +40,9 @@ public class Show {
     @Column(name = "age_rating")
     private AgeRating ageRating;
 
-    protected Show() {}
+    protected Show() {
+
+    }
 
     public Show(Long id, String title, String description, Genre genre, int durationMinutes, AgeRating ageRating) {
         if (title == null || title.isBlank()) {
