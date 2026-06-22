@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-drop-hall-and-performance-tables
+      author: fmi
+      changes:
+        - dropTable:
+            tableName: performance
+            cascadeConstraints: true
+        - dropTable:
+            tableName: hall

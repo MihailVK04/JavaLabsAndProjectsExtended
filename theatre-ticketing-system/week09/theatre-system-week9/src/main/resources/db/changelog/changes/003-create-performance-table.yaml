@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-performance-table
+      author: fmi
+      changes:
+        - createTable:
+            tableName: performance
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: show_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hall_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(32)
+        - addForeignKeyConstraint:
+            baseTableName: performance
+            baseColumnNames: show_id
+            referencedTableName: show
+            referencedColumnNames: id
+            constraintName: fk_performance_show
+        - addForeignKeyConstraint:
+            baseTableName: performance
+            baseColumnNames: hall_id
+            referencedTableName: hall
+            referencedColumnNames: id
+            constraintName: fk_performance_hall

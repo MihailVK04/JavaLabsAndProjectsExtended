@@ -1,0 +1,14 @@
+package bg.uni.fmi.theatre.dto;
+
+import bg.uni.fmi.theatre.domain.Show;
+import bg.uni.fmi.theatre.vo.AgeRating;
+import bg.uni.fmi.theatre.vo.Genre;
+
+public record ShowResponse(Long id, String title, String description, Genre genre, int durationMinutes,
+                           AgeRating ageRating) {
+
+    public static ShowResponse from(Show show) {
+        return new ShowResponse(show.getId(), show.getTitle(), show.getDescription(), show.getGenre(),
+            show.getDurationMinutes(), show.getAgeRating());
+    }
+}
