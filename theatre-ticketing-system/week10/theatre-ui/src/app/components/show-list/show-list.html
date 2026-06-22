@@ -1,0 +1,42 @@
+<div class="toolbar">
+  <h2>Shows</h2>
+  <button (click)="goToAdd()">+ Add Show</button>
+</div>
+
+@if (loading()) {
+  <p>Loading shows...</p>
+}
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Genre</th>
+      <th>Duration (min)</th>
+      <th>Age Rating</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (show of shows(); track show.id) {
+      <tr>
+        <td>
+          <a (click)="goToDetail(show)" style="cursor: pointer">{{ show.title }}</a>
+        </td>
+        <td>{{ show.genre }}</td>
+        <td>{{ show.durationMinutes }}</td>
+        <td>{{ show.ageRating }}</td>
+        <td>
+          <button (click)="goToEdit(show)">Edit</button>
+          <button (click)="deleteShow(show.id)">Delete</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="5">No show found.</td></tr>
+    }
+  </tbody>
+</table>
